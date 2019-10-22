@@ -4,7 +4,7 @@ const Joi = require('joi');
 const { Post } = require('../../../model/Post');
 
 module.exports = async (req, res) => {
-	console.log("ok");
+	// console.log("ok");
 	// 获取用户id
 	const id = req.params['id'];
 	// 验证模型

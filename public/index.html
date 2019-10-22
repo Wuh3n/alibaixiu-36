@@ -382,7 +382,7 @@
       type: 'get',
       url: '/posts/lasted',
       success: function (res) {
-        // console.log(res);
+        console.log(res);
         var str = template('newTpl', { data: res });
         $('.new').html(str);
       }

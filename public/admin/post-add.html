@@ -9,24 +9,30 @@
 <html lang="zh-CN">
 
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   <title>Add new post &laquo; Admin</title>
-  <link rel="stylesheet" href="../assets/vendors/bootstrap/css/bootstrap.css">
-  <link rel="stylesheet" href="../assets/vendors/font-awesome/css/font-awesome.css">
-  <link rel="stylesheet" href="../assets/vendors/nprogress/nprogress.css">
-  <link rel="stylesheet" href="../assets/css/admin.css">
+  <link rel="stylesheet" href="../assets/vendors/bootstrap/css/bootstrap.css" />
+  <link rel="stylesheet" href="../assets/vendors/font-awesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="../assets/vendors/nprogress/nprogress.css" />
+  <link rel="stylesheet" href="../assets/css/admin.css" />
   <script src="../assets/vendors/nprogress/nprogress.js"></script>
 </head>
 
 <body>
-  <script>NProgress.start()</script>
+  <script>
+    NProgress.start();
+  </script>
 
   <div class="main">
     <nav class="navbar">
       <button class="btn btn-default navbar-btn fa fa-bars"></button>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="profile.html"><i class="fa fa-user"></i>个人中心</a></li>
-        <li><a href="javascript:;" id="logout"><i class="fa fa-sign-out"></i>退出</a></li>
+        <li>
+          <a href="profile.html"><i class="fa fa-user"></i>个人中心</a>
+        </li>
+        <li>
+          <a href="javascript:;" id="logout"><i class="fa fa-sign-out"></i>退出</a>
+        </li>
       </ul>
     </nav>
     <div class="container-fluid">
@@ -41,7 +47,7 @@
         <div class="col-md-9">
           <div class="form-group">
             <label for="title">标题</label>
-            <input id="title" class="form-control input-lg" name="title" type="text" placeholder="文章标题">
+            <input id="title" class="form-control input-lg" name="title" type="text" placeholder="文章标题" />
           </div>
           <div class="form-group">
             <label for="content">内容</label>
@@ -53,9 +59,9 @@
           <div class="form-group">
             <label for="feature">特色图像</label>
             <!-- show when image chose -->
-            <img class="help-block thumbnail" style="display: none" id="prev">
-            <input id="feature" class="form-control" name="feature" type="file">
-            <input id="img" name="thumbnail" type="hidden">
+            <img class="help-block thumbnail" style="display: none" id="prev" />
+            <input id="feature" class="form-control" name="feature" type="file" />
+            <input id="img" name="thumbnail" type="hidden" />
           </div>
           <div class="form-group">
             <label for="category">所属分类</label>
@@ -66,7 +72,7 @@
           </div>
           <div class="form-group">
             <label for="created">发布时间</label>
-            <input id="created" class="form-control" name="createAt" type="datetime-local">
+            <input id="created" class="form-control" name="createAt" type="datetime-local" />
           </div>
           <div class="form-group">
             <label for="status">状态</label>
@@ -76,8 +82,13 @@
             </select>
           </div>
           <div class="form-group">
-            <button class="btn btn-primary" type="button" id="pAdd">保存</button>
-            <button class="btn btn-primary" type="button" id="pEdit" style="display: none">编辑</button>
+            <button class="btn btn-primary" type="button" id="pAdd">
+              保存
+            </button>
+            <!-- 因为post-add.html它本身是添加文章功能  下面这个按钮 默认让其隐藏 只有修改文章的时候才显示 同时需要将上面的保存按钮隐藏起来 -->
+            <button class="btn btn-primary" type="button" id="pEdit" style="display: none;">
+              编辑
+            </button>
           </div>
         </div>
       </form>
@@ -86,7 +97,7 @@
 
   <div class="aside">
     <div class="profile">
-      <img class="avatar" src="../uploads/avatar.jpg">
+      <img class="avatar" src="../uploads/avatar.jpg" />
       <h3 class="name">Coder</h3>
     </div>
     <ul class="nav">
@@ -128,126 +139,92 @@
   <!-- 构建模板 -->
 
   <script type="text/html" id="cTpl">
-    {{each list}}
-    <option value="{{$value._id}}">{{$value.title}}</option>
-    {{/each}}
-  </script>
-
+      {{each list}}
+      <option value="{{$value._id}}">{{$value.title}}</option>
+      {{/each}}
+    </script>
 
   <script>
-
-    $('#logout').on('click', function () {
-      var isConfirm = confirm('您真的要退出吗?');
+    $("#logout").on("click", function () {
+      var isConfirm = confirm("您真的要退出吗?");
       if (isConfirm) {
         // alert('用户点击了确认按钮')
         $.ajax({
-          type: 'post',
-          url: '/logout',
+          type: "post",
+          url: "/logout",
           success: function () {
-            location.href = 'login.html';
+            location.href = "login.html";
           },
           error: function () {
-            alert('退出失败')
+            alert("退出失败");
           }
-        })
+        });
       }
     });
 
-
-    // 完成图片上传功能 
-    $('#feature').on('change', function () {
+    // 完成图片上传功能
+    $("#feature").on("change", function () {
       // 创建FormData对象
       var formData = new FormData();
-      formData.append('avatar', this.files[0]);
+      formData.append("avatar", this.files[0]);
       // 发送ajax
       $.ajax({
-        type: 'post',
-        url: '/upload',
+        type: "post",
+        url: "/upload",
         data: formData,
         processData: false,
         contentType: false,
         success: function (res) {
-          $('#img').val(res[0].avatar);
-          $('#prev').show().attr('src', res[0].avatar);
+          $("#img").val(res[0].avatar);
+          $("#prev")
+            .show()
+            .attr("src", res[0].avatar);
         }
-      })
+      });
     });
 
-
-    // 获取所有的分类  
+    // 获取所有的分类
     $.ajax({
-      type: 'get',
-      url: '/categories',
+      type: "get",
+      url: "/categories",
       success: function (res) {
-        var str = template('cTpl', { list: res });
+        var str = template("cTpl", { list: res });
         // console.log(str);
-        $('#category').append(str);
+        $("#category").append(str);
       }
     });
 
-    // 添加文章功能 
-    $('#pAdd').on('click', function () {
-      var formData = $('form').serialize();
+    // 添加文章功能
+    $("#pAdd").on("click", function () {
+      var formData = $("form").serialize();
 
       $.ajax({
-        type: 'post',
-        url: '/posts',
+        type: "post",
+        url: "/posts",
         data: formData,
         success: function (res) {
-          location.href = 'posts.html';
+          location.href = "posts.html";
         }
       });
-
     });
 
-    var id = getUrlParams('id');
+    // 展示用户的相关信息
+    $.ajax({
+      type: "get",
+      url: "/users/" + userId,
+      success: function (response) {
+        // console.log(response);
+        $(".avatar").attr("src", response.avatar);
+        $(".profile .name").html(response.nickName);
+      }
+    });
 
-    if (id != -1) {
-      // 编辑功能 根据传递过来的id去请求服务器将这篇文章的所有数据查询
-      $.ajax({
-        type: 'get',
-        url: '/posts/' + id,
-        success: function (res) {
-          // console.log(res);
-          $('#title').val(res.title);
-          $('#content').val(res.content);
-          $('h1').text('编辑文章');
-          // 预览图片
-          $('#prev').show().attr('src', res.thumbnail);
-          $('#img').val(res.thumbnail);
-
-          // 将对应的分类显示出来 
-          $('#category > option').each((index, item) => {
-            // 判断option里面的value属性的值与res.category的值是否相等 如果相等 就表示是这个分类 给其设置一个selected 
-            if ($(item).attr('value') == res.category) {
-              $(item).prop('selected', true);
-            }
-          });
-
-
-          $('#status > option').each((index, item) => {
-            // 判断option里面的value属性的值与res.category的值是否相等 如果相等 就表示是这个分类 给其设置一个selected 
-            if ($(item).attr('value') == res.state) {
-              $(item).prop('selected', true);
-            }
-          });
-
-          $('#created').val(res.createAt &&　res.createAt.substr(0,16));
-
-          // 将保存按钮隐藏 将编辑按钮显示出来 
-          $('#pAdd').hide();
-          $('#pEdit').show();
-
-        }
-      })
-    }
-
-    // 从浏览器的地址栏中获取查询参数
+    // 从浏览器的地址栏中获取查询参数  如果有这个参数 就将它的返回给我们 如果没有 就返回-1
     function getUrlParams(name) {
-      var paramsAry = location.search.substr(1).split('&');
+      var paramsAry = location.search.substr(1).split("&");
       // 循环数据
       for (var i = 0; i < paramsAry.length; i++) {
-        var tmp = paramsAry[i].split('=');
+        var tmp = paramsAry[i].split("=");
         if (tmp[0] == name) {
           return tmp[1];
         }
@@ -255,29 +232,70 @@
       return -1;
     }
 
-    // 给编辑按钮注册点击事件 发送ajax 完成对文章的编辑功能  当编辑完成以后 我们需要让页面跳转到posts.html页面
-    $('#pEdit').on('click',function(){
+    // 调用这个函数
+    var id = getUrlParams("id");
+    if (id != -1) {
+      // 完成 是文章 的修改功能
+      // 需要将对应的数据显示的到对应的输入框
+      // 发送ajax 通过id获取这篇文章 的所有的数据
       $.ajax({
-        type:'put',
-        url:'/posts/' + id,
-        data:$('form').serialize(),
-        success:function(res){
-          location.href = "posts.html";
+        url: "/posts/" + id,
+        type: "get",
+        success: function (res) {
+          // console.log(res);
+
+          // 先将保存按钮 给隐藏 同时将编辑按钮显示
+          $("#pAdd").hide();
+          $("#pEdit").show();
+          // 将写文章修改为 修改文章
+          $("h1").text("修改文章");
+          $("#title").val(res.title);
+          $("#content").val(res.content);
+          // 我们需要显示图片
+          $("#prev")
+            .attr("src", res.thumbnail)
+            .show();
+          // 将地址写到隐藏域中
+          $("#img").val(res.thumbnail);
+
+          // 显示修改的分类  each用于遍历jQuery的对象   后面的两个参数 代表 value　索引值  item 代表dom对象 　
+          $("#category > option").each(function (value, item) {
+            // 形参 item得到 是dom对象  将dom对象转换为jQuery对象  $(dom对象)
+            if ($(item).val() == res.category._id) {
+              $(item).prop("selected", true);
+            }
+          });
+
+          // 显示修改的状态
+          $("#status > option").each((index, item) => {
+            // 判断option里面的value属性的值与res.category的值是否相等 如果相等 就表示是这个分类 给其设置一个selected
+            if ($(item).attr("value") == res.state) {
+              $(item).prop("selected", true);
+            }
+          });
+
+          // 显示时间
+          $('#created').val(res.createAt && res.createAt.substr(0, 16))
+        }
+      });
+    }
+
+    // 找到 pEdit这个按钮 给其添加click事件 然后发送ajax   put  delete get  post 
+    $('#pEdit').on('click', function () {
+      $.ajax({
+        url: '/posts/' + id,
+        type: 'put',
+        data: $('form').serialize(),
+        success: function (res) {
+          location.href = 'posts.html'
         }
       });
     });
- // 展示用户的相关信息
- $.ajax({
-      type: 'get',
-      url: '/users/' + userId,
-      success: function (response) {
-        // console.log(response);
-        $('.avatar').attr('src', response.avatar)
-        $('.profile .name').html(response.nickName)
-      }
-    })
+
   </script>
-  <script>NProgress.done()</script>
+  <script>
+    NProgress.done();
+  </script>
 </body>
 
 </html>
